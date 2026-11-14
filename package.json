@@ -1,0 +1,25 @@
+
+{
+  "name": "browser-automation-app",
+  "version": "1.0.0",
+  "description": "Windows browser automation and authorized form testing",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "playwright": "^1.52.0"
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.browser.automation",
+    "productName": "Browser Automation",
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
