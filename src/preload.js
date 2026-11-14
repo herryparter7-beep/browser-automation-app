@@ -1,7 +1,12 @@
-const { contextBridge } = require("electron");
+
+const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("appInfo", {
   name: "Browser Automation",
   version: "1.0.0",
-  platform: "Windows"
+  platform: "Windows",
+
+  checkProxy: (proxy) => {
+    return ipcRenderer.invoke("proxy:check", proxy);
+  }
 });
