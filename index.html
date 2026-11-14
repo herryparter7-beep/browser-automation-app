@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Browser Automation Pro</title>
+<style>
+:root{
+ --green:#087f4b;--dark:#075c39;--light:#eaf7ef;
+ --bg:#f5f8f6;--white:#fff;--text:#18352a;
+ --muted:#819087;--border:#e5eee8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:Inter,Arial,sans-serif}
+.sidebar{width:245px;position:fixed;inset:0 auto 0 0;
+background:white;border-right:1px solid var(--border);
+padding:25px 17px;z-index:5}
+.brand{font-size:21px;font-weight:800;color:var(--green);
+padding:8px 10px 30px}
+.brand span{background:var(--green);color:white;padding:8px;
+border-radius:10px;margin-right:8px}
+.nav-title{font-size:10px;color:#a0aaa4;letter-spacing:1.5px;
+font-weight:bold;padding:16px 12px 7px}
+.nav{display:flex;align-items:center;gap:12px;padding:13px;
+border-radius:9px;margin:4px 0;color:#64766b;font-size:14px;
+cursor:pointer}
+.nav:hover,.nav.active{background:var(--light);color:var(--green);
+font-weight:700}
+.sidebar-bottom{position:absolute;bottom:20px;left:20px;right:20px;
+background:var(--light);padding:14px;border-radius:12px;
+font-size:12px;line-height:1.7}
+main{margin-left:245px;padding:30px;max-width:1600px}
+.topbar{display:flex;justify-content:space-between;align-items:center;
+margin-bottom:27px;gap:15px}
+h1{font-size:27px;margin:0 0 7px}
+.sub{color:var(--muted);font-size:13px}
+.status{background:#e5f6eb;color:var(--green);padding:10px 15px;
+border-radius:30px;font-size:12px;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat,.panel{background:white;border:1px solid var(--border);
+border-radius:15px;padding:20px}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-number{font-size:29px;font-weight:800;margin:13px 0 5px}
+.stat-icon{float:right;background:var(--light);color:var(--green);
+padding:10px;border-radius:10px}
+.panel{margin-top:20px}
+.panel-head{display:flex;justify-content:space-between;
+align-items:center;gap:10px;margin-bottom:18px}
+h2{font-size:17px;margin:0}
+.tag{font-size:11px;color:var(--green);background:var(--light);
+padding:6px 10px;border-radius:20px}
+label{display:block;font-size:12px;font-weight:700;margin:12px 0 7px}
+input,textarea,select{width:100%;padding:12px 13px;
+border:1px solid #dfe9e2;border-radius:9px;
+background:#fff;color:var(--text);font-size:13px;outline:none}
+input:focus,textarea:focus{border-color:var(--green)}
+textarea{min-height:125px;resize:vertical;line-height:1.6}
+button{border:0;border-radius:9px;padding:11px 15px;
+background:var(--green);color:white;font-weight:700;
+font-size:12px;cursor:pointer}
+button:hover{background:var(--dark)}
+button.light{background:var(--light);color:var(--green)}
+button.dark{background:#263c31}
+button:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:13px 10px;
+border-bottom:1px solid var(--border);white-space:nowrap}
+th{color:var(--muted);font-weight:600}
+.empty{text-align:center;color:var(--muted);padding:24px}
+.log{background:#f7faf8;border-radius:10px;padding:14px;
+font-size:12px;line-height:1.8;max-height:180px;overflow:auto;
+white-space:pre-wrap}
+.hidden{display:none}
+.notice{font-size:12px;color:#74847a;line-height:1.6;margin-top:12px}
+.profile-card{border:1px solid var(--border);border-radius:10px;
+padding:14px;margin-bottom:10px;display:flex;
+justify-content:space-between;align-items:center;gap:10px}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:750px){
+.sidebar{position:relative;width:100%;padding:13px}
+.brand{padding:8px 8px 14px}
+.nav-title,.sidebar-bottom{display:none}
+.nav{display:inline-flex;padding:9px;font-size:12px}
+main{margin:0;padding:15px}
+.two{grid-template-columns:1fr}
+.topbar{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+ <div class="brand"><span>BA</span> Browser Pro</div>
+ <div class="nav-title">WORKSPACE</div>
+ <div class="nav active" data-page="dashboard">▦ Dashboard</div>
+ <div class="nav" data-page="profiles">▣ Browser Profiles</div>
+ <div class="nav" data-page="proxy">◈ Proxy Manager</div>
+ <div class="nav" data-page="agents">◎ User Agents</div>
+ <div class="nav" data-page="website">⌘ Website Testing</div>
+ <div class="nav-title">SYSTEM</div>
+ <div class="nav" data-page="logs">☷ Activity Logs</div>
+ <div class="sidebar-bottom">
+  <b>● Desktop Workspace</b><br>
+  Secure authorized website testing
+ </div>
+</aside>
+
+<main>
+<header class="topbar">
+ <div>
+  <h1 id="pageTitle">Dashboard Overview</h1>
+  <div class="sub">Manage your browser automation workspace</div>
+ </div>
+ <div class="status">● Interface Ready</div>
+</header>
+
+<section id="dashboard">
+ <div class="grid">
+  <div class="stat"><span class="stat-icon">▣</span>
+   <div class="stat-label">Browser Profiles</div>
+   <div class="stat-number" id="profileCount">0</div>
+   <div class="sub">Created profiles</div>
+  </div>
+  <div class="stat"><span class="stat-icon">◈</span>
+   <div class="stat-label">Proxy Entries</div>
+   <div class="stat-number" id="proxyCount">0</div>
+   <div class="sub">Imported entries</div>
+  </div>
+  <div class="stat"><span class="stat-icon">◎</span>
+   <div class="stat-label">User Agents</div>
+   <div class="stat-number" id="uaCount">0</div>
+   <div class="sub">Imported entries</div>
+  </div>
+  <div class="stat"><span class="stat-icon">◉</span>
+   <div class="stat-label">Active Sessions</div>
+   <div class="stat-number">0</div>
+   <div class="sub">No browser launched</div>
+  </div>
+ </div>
+
+ <div class="panel">
+  <div class="panel-head"><h2>Quick Website Testing</h2>
+   <span class="tag">Authorized domains only</span></div>
+  <label>Website URL</label>
+  <input id="quickUrl" placeholder="https://example.com">
+  <label>Authorized Domain</label>
+  <input id="quickDomain" placeholder="example.com">
+  <div class="actions">
+   <button onclick="validateWebsite()">Validate Website URL</button>
+   <button class="light" onclick="goPage('website')">Website Settings</button>
+  </div>
+  <p class="notice">Website opening and browser automation will be connected through the desktop backend in a later step.</p>
+ </div>
+
+ <div class="two">
+  <div class="panel">
+   <div class="panel-head"><h2>Proxy Overview</h2>
+    <span class="tag">Manager</span></div>
+   <div class="stat-number" id="proxySummary">0</div>
+   <div class="sub">Proxy entries imported</div>
+   <div class="actions"><button class="light" onclick="goPage('proxy')">Manage Proxies →</button></div>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><h2>User-Agent Overview</h2>
+    <span class="tag">Manager</span></div>
+   <div class="stat-number" id="uaSummary">0</div>
+   <div class="sub">User-Agent entries imported</div>
+   <div class="actions"><button class="light" onclick="goPage('agents')">Manage User Agents →</button></div>
+  </div>
+ </div>
+</section>
+
+<section id="proxy" class="hidden">
+ <div class="panel">
+  <div class="panel-head"><h2>Import Proxy List</h2><span class="tag">HTTP / HTTPS / SOCKS5</span></div>
+  <label>Paste proxies — one entry per line</label>
+  <textarea id="proxyInput" placeholder="host:port&#10;username:password@host:port&#10;socks5://host:port"></textarea>
+  <label>Or import TXT / CSV file</label>
+  <input type="file" id="proxyFile" accept=".txt,.csv">
+  <div class="actions">
+   <button onclick="importProxies()">Import Proxies</button>
+   <button class="light" onclick="document.getElementById('proxyInput').value=''">Clear Paste</button>
+  </div>
+  <p class="notice">This interface stores imported entries locally for this session. Live proxy connectivity checks require the Electron backend; a browser-only page cannot reliably test external proxy connections.</p>
+ </div>
+ <div class="panel">
+  <div class="panel-head"><h2>Proxy Check</h2><span class="tag">Backend required</span></div>
+  <p class="sub">Imported proxies will appear below. Actual connection, location and latency checks will be enabled after backend integration.</p>
+  <button class="light" disabled>Start Real Proxy Check — Coming Next</button>
+ </div>
+ <div class="panel">
+  <div class="panel-head"><h2>Imported Proxies</h2><span class="tag" id="proxyTotal">0 entries</span></div>
+  <div class="table-wrap"><table>
+   <thead><tr><th>#</th><th>Proxy Address</th><th>Status</th></tr></thead>
+   <tbody id="proxyRows"><tr><td colspan="3" class="empty">No proxies imported</td></tr></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="agents" class="hidden">
+ <div class="panel">
+  <div class="panel-head"><h2>User-Agent Import</h2><span class="tag">TXT / CSV</span></div>
+  <label>Paste User-Agent strings — one per line</label>
+  <textarea id="uaInput" placeholder="Mozilla/5.0 ...&#10;Mozilla/5.0 ..."></textarea>
+  <label>Or import file</label>
+  <input type="file" id="uaFile" accept=".txt,.csv">
+  <div class="actions">
+   <button onclick="importAgents()">Import User Agents</button>
+   <button class="light" onclick="document.getElementById('uaInput').value=''">Clear Paste</button>
+  </div>
+ </div>
+ <div class="panel">
+  <div class="panel-head"><h2>Imported User Agents</h2><span class="tag" id="uaTotal">0 entries</span></div>
+  <div class="table-wrap"><table>
+   <thead><tr><th>#</th><th>User-Agent</th></tr></thead>
+   <tbody id="uaRows"><tr><td colspan="2" class="empty">No User-Agents imported</td></tr></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="profiles" class="hidden">
+ <div class="panel">
+  <div class="panel-head"><h2>Create Browser Profile</h2><span class="tag">Isolated profiles</span></div>
+  <label>Profile Name</label>
+  <input id="profileName" placeholder="Example: Test Profile 01">
+  <label>Browser</label>
+  <select id="browserType"><option>Chrome</option><option>Chromium</option></select>
+  <label>Proxy Entry</label>
+  <select id="profileProxy"><option value="">No proxy selected</option></select>
+  <label>User-Agent</label>
+  <select id="profileUA"><option value="">Default User-Agent</option></select>
+  <div class="actions"><button onclick="createProfile()">Create Profile</button></div>
+  <p class="notice">Profile creation is currently a dashboard record. Isolated browser storage and launching will be connected in the desktop backend.</p>
+ </div>
+ <div class="panel">
+  <div class="panel-head"><h2>Your Profiles</h2><span class="tag" id="profileTotal">0 profiles</span></div>
+  <div id="profileRows"><div class="empty">No profiles created</div></div>
+ </div>
+</section>
+
+<section id="website" class="hidden">
+ <div class="panel">
+  <div class="panel-head"><h2>Website Testing Setup</h2><span class="tag">Safety Allowlist</span></div>
+  <label>Target Website URL</label>
+  <input id="testUrl" placeholder="https://your-website.com">
+  <label>Authorized Domain</label>
+  <input id="testDomain" placeholder="your-website.com">
+  <div class="actions"><button onclick="validateWebsite(true)">Validate URL</button></div>
+  <p class="notice">Use only websites you own or have permission to test. This tool is intended for manual and authorized form testing. It will not automate fake clicks, bulk signups or bypass anti-abuse protections.</p>
+ </div>
+</section>
+
+<section id="logs" class="hidden">
+ <div class="panel">
+  <div class="panel-head"><h2>Activity Logs</h2><button class="light" onclick="clearLogs()">Clear Logs</button></div>
+  <div class="log" id="activityLog">Dashboard initialized.</div>
+ </div>
+</section>
+
+</main>
+<script>
+let proxies=[],agents=[],profiles=[],logs=[];
+
+function log(message){
+ const time=new Date().toLocaleTimeString();
+ logs.unshift(time+" — "+message);
+ document.getElementById("activityLog").textContent=logs.join("\n");
+}
+function goPage(page){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(page).classList.remove("hidden");
+ document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.page===page));
+ const titles={dashboard:"Dashboard Overview",proxy:"Proxy Manager",agents:"User-Agent Manager",profiles:"Browser Profiles",website:"Website Testing",logs:"Activity Logs"};
+ document.getElementById("pageTitle").textContent=titles[page];
+}
+document.querySelectorAll(".nav").forEach(n=>n.onclick=()=>goPage(n.dataset.page));
+
+async function readInput(textId,fileId){
+ let text=document.getElementById(textId).value;
+ const file=document.getElementById(fileId).files[0];
+ if(file) text+="\n"+await file.text();
+ return text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+}
+async function importProxies(){
+ const entries=await readInput("proxyInput","proxyFile");
+ const unique=[...new Set(entries)];
+ proxies=[...new Set([...proxies,...unique])];
+ render();
+ log("Imported "+unique.length+" proxy entries.");
+ document.getElementById("proxyInput").value="";
+ document.getElementById("proxyFile").value="";
+}
+async function importAgents(){
+ const entries=await readInput("uaInput","uaFile");
+ const unique=[...new Set(entries)];
+ agents=[...new Set([...agents,...unique])];
+ render();
+ log("Imported "+unique.length+" User-Agent entries.");
+ document.getElementById("uaInput").value="";
+ document.getElementById("uaFile").value="";
+}
+function render(){
+ document.getElementById("proxyCount").textContent=proxies.length;
+ document.getElementById("proxySummary").textContent=proxies.length;
+ document.getElementById("proxyTotal").textContent=proxies.length+" entries";
+ document.getElementById("uaCount").textContent=agents.length;
+ document.getElementById("uaSummary").textContent=agents.length;
+ document.getElementById("uaTotal").textContent=agents.length+" entries";
+ document.getElementById("profileCount").textContent=profiles.length;
+ document.getElementById("profileTotal").textContent=profiles.length+" profiles";
+ document.getElementById("proxyRows").innerHTML=proxies.length?
+ proxies.map((p,i)=>`<tr><td>${i+1}</td><td>${escapeHTML(p)}</td><td><span class="tag">Untested</span></td></tr>`).join(""):
+ '<tr><td colspan="3" class="empty">No proxies imported</td></tr>';
+ document.getElementById("uaRows").innerHTML=agents.length?
+ agents.map((a,i)=>`<tr><td>${i+1}</td><td>${escapeHTML(a)}</td></tr>`).join(""):
+ '<tr><td colspan="2" class="empty">No User-Agents imported</td></tr>';
+ document.getElementById("profileProxy").innerHTML='<option value="">No proxy selected</option>'+proxies.map((p,i)=>`<option value="${i}">Proxy ${i+1}</option>`).join("");
+ document.getElementById("profileUA").innerHTML='<option value="">Default User-Agent</option>'+agents.map((a,i)=>`<option value="${i}">User-Agent ${i+1}</option>`).join("");
+ document.getElementById("profileRows").innerHTML=profiles.length?
+ profiles.map((p,i)=>`<div class="profile-card"><div><b>${escapeHTML(p.name)}</b><div class="sub">${p.browser} · ${p.proxy} · ${p.ua}</div></div><span class="tag">Saved</span></div>`).join(""):
+ '<div class="empty">No profiles created</div>';
+}
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function createProfile(){
+ const name=document.getElementById("profileName").value.trim();
+ if(!name){alert("Enter a profile name.");return;}
+ const proxy=document.getElementById("profileProxy").value;
+ const ua=document.getElementById("profileUA").value;
+ profiles.push({
+  name,browser:document.getElementById("browserType").value,
+  proxy:proxy===""?"Default":"Proxy "+(Number(proxy)+1),
+  ua:ua===""?"Default UA":"User-Agent "+(Number(ua)+1)
+ });
+ document.getElementById("profileName").value="";
+ render();log("Created profile record: "+name);
+}
+function validateWebsite(fromPage=false){
+ const urlText=document.getElementById(fromPage?"testUrl":"quickUrl").value.trim();
+ const domain=document.getElementById(fromPage?"testDomain":"quickDomain").value.trim().toLowerCase();
+ try{
+  const url=new URL(urlText);
+  if(!["http:","https:"].includes(url.protocol))throw Error("Only HTTP and HTTPS URLs are allowed.");
+  if(!domain)throw Error("Enter the authorized domain.");
+  if(url.hostname.toLowerCase()!==domain && !url.hostname.toLowerCase().endsWith("."+domain))
+   throw Error("URL does not match the authorized domain.");
+  alert("URL validated for the authorized domain. Browser connection is not configured yet.");
+  log("Validated authorized website URL: "+url.href);
+ }catch(e){alert(e.message);log("URL validation failed: "+e.message);}
+}
+function clearLogs(){logs=[];document.getElementById("activityLog").textContent="Logs cleared.";}
+render();
+</script>
+</body>
+</html>
